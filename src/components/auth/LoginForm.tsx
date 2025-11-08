@@ -105,8 +105,8 @@ export default function LoginForm({
   return (
     <form onSubmit={handleSubmit} className={wrapper + (className ? ` ${className}` : "")}>
       <div className="grid gap-2">
-        <Label htmlFor="login" className={labelClass}>
-          Email or Username
+        <Label htmlFor="login" className={labelClass + " text-white"}>
+          Email
         </Label>
         <Input
           id="login"
@@ -115,22 +115,23 @@ export default function LoginForm({
           onChange={(e) => setLogin(e.target.value)}
           // placeholder="you@example.com"
           autoComplete="username"
+          className="text-white"
           required
         />
       </div>
       <div className="grid gap-2">
         <div className="flex items-center justify-between">
-          <Label htmlFor="password" className={labelClass}>
+          <Label htmlFor="password" className={labelClass + " text-white"}>
             Password
           </Label>
-          <button
-            type="button"
+          <Button
+            variant="ghost"
             className="text-xs text-muted-foreground hover:text-foreground underline"
             onClick={() => setShowPassword((s) => !s)}
             aria-pressed={showPassword}
           >
             {showPassword ? "Hide" : "Show"}
-          </button>
+          </Button>
         </div>
         <Input
           id="password"
@@ -139,6 +140,7 @@ export default function LoginForm({
           onChange={(e) => setPassword(e.target.value)}
           // placeholder="••••••••"
           autoComplete="current-password"
+          className="text-white"
           required
         />
       </div>
@@ -168,7 +170,7 @@ export default function LoginForm({
           {errorMsg}
         </p>
       )}
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
         {isLoading ? "Signing in…" : submitLabel}
       </Button>
     </form>

@@ -25,9 +25,9 @@ export default function Header() {
             className="h-12 w-auto"
             loading="lazy"
           />
-          <span className="text-sm font-semibold uppercase tracking-widest text-white">
+          {/* <span className="text-sm font-semibold uppercase tracking-widest text-white">
             MK Raffle
-          </span>
+          </span> */}
         </Link>
         <nav className="flex items-center gap-6 text-sm font-medium text-zinc-300">
           {navItems.map((item) => (
@@ -50,7 +50,7 @@ export default function Header() {
             </DialogTrigger>
             <DialogContent className="max-w-md border-white/10 bg-zinc-950">
               <DialogHeader>
-                <DialogTitle>Log in to your account</DialogTitle>
+                <DialogTitle className="text-white">Log in to your account</DialogTitle>
                 <DialogDescription>
                   Access raffle entries and manage your profile.
                 </DialogDescription>
@@ -61,6 +61,7 @@ export default function Header() {
                 }}
                 className="mt-4"
               />
+              <p>Do not have an account yet? <Link href="/join" className="text-sm underline">Create account</Link></p>
             </DialogContent>
           </Dialog>
         </nav>
