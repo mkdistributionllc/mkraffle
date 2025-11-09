@@ -20,12 +20,10 @@ export default function HomePage() {
               <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
                 Spin to win over <span className="text-green-500">$100</span> worth of MK100 glass!
               </h1>
-              <p className="max-w-2xl text-sm text-zinc-300 sm:text-base">
-                Claim a FREE ticket per account, stack additional entries, and watch the live raffle wheel fill up with your odds. The drawing happens at midnight PST—don’t miss out.
-              </p>
+              <p className="max-w-2xl text-sm text-zinc-300 sm:text-base">Claim a FREE ticket per account and stack additional entries! Dont miss out!</p>
             </div>
             <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr]">
-              <div className="rounded-3xl border border-white/5 bg-zinc-900/60 p-8 shadow-2xl shadow-black/40">
+              <div className="rounded-3xl border border-white/5 bg-zinc-900/60 p-2 lg:p-8 shadow-2xl shadow-black/40">
                 <RaffleEntriesWheel entries={raffleEntries} />
               </div>
               <div className="flex flex-col gap-8">

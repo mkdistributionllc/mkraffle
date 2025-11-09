@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
 
 const navItems = [
-  { label: "Shop Products", href: "https://mk100glass.com/shop/" },
+  { label: "Shop", href: "https://mk100glass.com/shop/" },
   { label: "Raffle", href: "/raffle" },
 ];
 
@@ -43,7 +43,7 @@ export default function Header() {
             <DialogTrigger asChild>
               <Button
                 variant="outline"
-                className="border-white/20 bg-transparent text-white hover:border-white hover:bg-white/10"
+                className="border-white/20 bg-transparent text-white cursor-pointer"
               >
                 Login
               </Button>

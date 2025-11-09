@@ -72,10 +72,10 @@ export function RaffleEntriesWheel({
       <div className="relative flex items-center justify-center">
         <div className="relative h-[420px] w-[420px]">
           <div className="absolute inset-0 rounded-full border border-white/10 bg-zinc-950/80 shadow-2xl shadow-black/40 backdrop-blur">
-            <div className="absolute inset-[18px] rounded-full border border-white/5 bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 shadow-inner shadow-black/60" />
+            <div className="absolute inset-[8px] rounded-full border border-white/5 bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 shadow-inner shadow-black/60" />
           </div>
           <div
-            className="absolute inset-[28px]"
+            className="absolute inset-[0]"
             style={{ transformOrigin: "50% 50%", transform: `rotate(${rotation}deg)` }}
           >
             <WheelSvg segments={segments} />
@@ -131,7 +131,7 @@ function WheelSvg({ segments }: WheelSvgProps) {
         const { x, y } = polarToCartesian(
           CENTER,
           CENTER,
-          RADIUS * 0.63,
+          RADIUS * 0.55,
           segment.midAngle
         );
         return (
@@ -139,9 +139,9 @@ function WheelSvg({ segments }: WheelSvgProps) {
             key={`${segment.entry.id}-label`}
             x={x}
             y={y}
-            fill="#0f172a"
+            fill="#fff"
             fontWeight={600}
-            fontSize={10}
+            fontSize={11}
             dominantBaseline="middle"
             textAnchor="middle"
             transform={`rotate(${segment.midAngle}, ${x}, ${y})`}
