@@ -1,0 +1,13 @@
+[
+  { "id": "usr-1001", "label": "Jordan M.", "weight": 3 },
+  { "id": "usr-1002", "label": "Taylor R.", "weight": 5 },
+  { "id": "usr-1003", "label": "Chris A.", "weight": 2 },
+  { "id": "usr-1004", "label": "Morgan S.", "weight": 4 },
+  { "id": "usr-1005", "label": "Alex P.", "weight": 1 },
+  { "id": "usr-1006", "label": "Sydney L.", "weight": 3 },
+  { "id": "usr-1007", "label": "Jamie K.", "weight": 2 },
+  { "id": "usr-1008", "label": "Robin D.", "weight": 6 },
+  { "id": "usr-1009", "label": "Casey W.", "weight": 1 },
+  { "id": "usr-1010", "label": "Pat Q.", "weight": 4 }
+]
+
