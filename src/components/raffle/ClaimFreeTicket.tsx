@@ -19,13 +19,11 @@ export default function ClaimFreeTicket({ onClaim, className }: ClaimFreeTicketP
     event.preventDefault();
     setStatus("idle");
     setMessage(null);
-
     if (!email) {
       setStatus("error");
       setMessage("Enter the email tied to your MK100 account.");
       return;
     }
-
     try {
       setIsSubmitting(true);
       await onClaim?.(email);
@@ -54,17 +52,15 @@ export default function ClaimFreeTicket({ onClaim, className }: ClaimFreeTicketP
             Step 1
           </p>
           <h3 className="mt-2 text-2xl font-semibold text-white">
-            Claim your free raffle ticket
+            Claim Your FREE Raffle Ticket
           </h3>
           <p className="mt-3 text-sm text-emerald-100/80">
-            Every registered MK100 account receives one complimentary ticket. Enter
-            your account email to secure your spot in the drawing.
+            Every registered account receives one complimentary ticket. Login to your account to secure your spot in the raffle.
           </p>
         </div>
       </div>
-
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        <div className="grid gap-2">
+        {/* <div className="grid gap-2">
           <Label htmlFor="claim-email" className="text-emerald-50">
             Account email
           </Label>
@@ -78,8 +74,7 @@ export default function ClaimFreeTicket({ onClaim, className }: ClaimFreeTicketP
             className="border-emerald-400/40 bg-emerald-400/10 text-white placeholder:text-emerald-100/60 focus-visible:border-emerald-300 focus-visible:ring-emerald-200/40"
             required
           />
-        </div>
-
+        </div> */}
         {status !== "idle" && message && (
           <p
             className={
@@ -90,13 +85,12 @@ export default function ClaimFreeTicket({ onClaim, className }: ClaimFreeTicketP
             {message}
           </p>
         )}
-
         <Button
           type="submit"
           className="w-full bg-emerald-400 text-emerald-900 hover:bg-emerald-300"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Claiming…" : "Claim free ticket"}
+          {isSubmitting ? "Claiming…" : "Claim Free Ticket"}
         </Button>
       </form>
     </section>

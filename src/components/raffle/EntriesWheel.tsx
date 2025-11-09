@@ -81,14 +81,11 @@ export function RaffleEntriesWheel({
             <WheelSvg segments={segments} />
           </div>
         </div>
-        <div className="pointer-events-none absolute -top-9 flex flex-col items-center">
+        {/* <div className="pointer-events-none absolute -top-9 flex flex-col items-center">
           <span className="relative block h-16 w-16 rounded-full border-2 border-amber-400 bg-amber-500 text-transparent shadow-lg shadow-amber-900/60">
             <span className="absolute left-1/2 top-full h-5 w-3 -translate-x-1/2 rounded-b-full bg-amber-400" />
           </span>
-          <span className="mt-2 text-[10px] font-semibold uppercase tracking-[0.4em] text-amber-200">
-            Live odds
-          </span>
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col items-center justify-center gap-2 rounded-full border border-white/10 bg-zinc-950/80 text-zinc-100 shadow-inner shadow-black/40">
         <span className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-300">
@@ -144,7 +141,7 @@ function WheelSvg({ segments }: WheelSvgProps) {
             y={y}
             fill="#0f172a"
             fontWeight={600}
-            fontSize={12}
+            fontSize={10}
             dominantBaseline="middle"
             textAnchor="middle"
             transform={`rotate(${segment.midAngle}, ${x}, ${y})`}

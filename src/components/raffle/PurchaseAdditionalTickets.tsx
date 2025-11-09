@@ -39,19 +39,16 @@ export default function PurchaseAdditionalTickets({
     event.preventDefault();
     setStatus("idle");
     setMessage(null);
-
     if (!activeBundle) {
       setStatus("error");
       setMessage("Choose a ticket bundle before continuing.");
       return;
     }
-
     if (!email) {
       setStatus("error");
       setMessage("Enter the email tied to your MK100 account.");
       return;
     }
-
     try {
       setIsSubmitting(true);
       await onPurchase?.(activeBundle.id, email);
@@ -82,30 +79,21 @@ export default function PurchaseAdditionalTickets({
             Step 2
           </p>
           <h3 className="mt-2 text-2xl font-semibold text-white">
-            Purchase additional tickets
+            Purchase Additional Tickets
           </h3>
           <p className="mt-3 text-sm text-amber-100/80">
-            Increase your chances with simple, flat pricing—each entry costs {formattedTicketPrice}. Tickets are applied to your
+            Increase your chances with simple, flat pricing. Each entry costs {formattedTicketPrice}. Tickets are applied to your
             account instantly after purchase.
           </p>
         </div>
-        <div className="hidden text-right text-sm text-amber-100/70 sm:block">
-          <p>
-            Drawing closes in <strong>00:45:10</strong>
-          </p>
-          <p className="mt-1 text-amber-100/60">Countdown updates in real time.</p>
-        </div>
       </div>
-
       <form onSubmit={handleSubmit} className="mt-6 space-y-6">
         <fieldset className="grid gap-3 sm:grid-cols-2">
           <legend className="text-xs font-medium uppercase tracking-[0.2em] text-amber-200">
-            Choose a bundle
+            Choose Quantity
           </legend>
-
           {TICKET_BUNDLES.map((bundle) => {
             const isActive = bundle.id === selectedBundle;
-
             return (
               <button
                 type="button"
@@ -129,8 +117,7 @@ export default function PurchaseAdditionalTickets({
             );
           })}
         </fieldset>
-
-        <div className="grid gap-2">
+        {/* <div className="grid gap-2">
           <Label htmlFor="purchase-email" className="text-amber-50">
             Account email
           </Label>
@@ -144,8 +131,7 @@ export default function PurchaseAdditionalTickets({
             className="border-amber-400/40 bg-amber-400/10 text-white placeholder:text-amber-100/60 focus-visible:border-amber-200 focus-visible:ring-amber-200/40"
             required
           />
-        </div>
-
+        </div> */}
         {status !== "idle" && message && (
           <p
             className={
@@ -156,13 +142,12 @@ export default function PurchaseAdditionalTickets({
             {message}
           </p>
         )}
-
         <Button
           type="submit"
           className="w-full bg-amber-400 text-amber-950 hover:bg-amber-300"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Processing…" : `Purchase ${activeBundle?.quantity ?? ""} ticket${activeBundle && activeBundle.quantity > 1 ? "s" : ""}`}
+          {isSubmitting ? "Processing…" : `Purchase Ticket${activeBundle && activeBundle.quantity > 1 ? "s" : ""}`}
         </Button>
       </form>
     </section>

@@ -3,7 +3,7 @@ const sections = [
     title: "Eligibility & Timing",
     items: [
       "Open to verified MK100 customer accounts. You must be 21+ to enter.",
-      "Entries open at 12:00 AM PST on Black Friday and close at 11:59 PM PST the same day.",
+      // "Entries open at 12:00 AM PST on Black Friday and close at 11:59 PM PST the same day.",
       "One free ticket per verified account. Additional tickets can be purchased while the raffle is live.",
     ],
   },
