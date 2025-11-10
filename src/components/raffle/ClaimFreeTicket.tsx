@@ -5,14 +5,12 @@ import { Button } from "@/components/ui/button";
 
 type ClaimFreeTicketProps = {
   raffleId: number;
-  productId?: number;
   onClaim?: () => Promise<void> | void;
   className?: string;
 };
 
 export default function ClaimFreeTicket({
   raffleId,
-  productId = 0,
   onClaim,
   className,
 }: ClaimFreeTicketProps) {
@@ -21,6 +19,7 @@ export default function ClaimFreeTicket({
   const [message, setMessage] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [hasClaimed, setHasClaimed] = useState(false);
 
   useEffect(() => {
     const updateAuthState = () => {
@@ -48,6 +47,64 @@ export default function ClaimFreeTicket({
     return `Basic ${typeof window !== "undefined" ? window.btoa(`${username}:${token}`) : ""}`;
   }, [isLoggedIn, currentUser]);
 
+  useEffect(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!isLoggedIn || !authHeader || !baseUrl) {
+      setHasClaimed(false);
+      if (!isLoggedIn) {
+        setStatus("idle");
+        setMessage(null);
+      }
+      return;
+    }
+    let cancelled = false;
+    const fetchExistingTicket = async () => {
+      try {
+        const response = await fetch(
+          `${baseUrl}/wp-json/mk100glass/v1/raffles/${raffleId}/tickets`,
+          {
+            headers: {
+              Authorization: authHeader,
+            },
+          }
+        );
+        if (!response.ok) {
+          if (response.status === 404) {
+            if (!cancelled) {
+              setHasClaimed(false);
+              setStatus("idle");
+              setMessage(null);
+            }
+            return;
+          }
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data?.error || data?.message || "Unable to verify ticket status.");
+        }
+        const data = await response.json().catch(() => ({}));
+        const alreadyClaimed = Array.isArray(data?.tickets) && data.tickets.length > 0;
+        if (!cancelled) {
+          setHasClaimed(alreadyClaimed);
+          if (alreadyClaimed) {
+            setStatus("success");
+            setMessage("You have already claimed your free ticket for this raffle.");
+          } else {
+            setStatus("idle");
+            setMessage(null);
+          }
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setStatus("error");
+          setMessage((error as Error)?.message || "Unable to verify ticket status.");
+        }
+      }
+    };
+    fetchExistingTicket();
+    return () => {
+      cancelled = true;
+    };
+  }, [isLoggedIn, authHeader, raffleId]);
+
   async function handleClaim() {
     if (!authHeader) {
       setStatus("error");
@@ -62,31 +119,29 @@ export default function ClaimFreeTicket({
       if (!baseUrl) {
         throw new Error("API base URL is not configured.");
       }
-      const buyerName = [currentUser?.first_name, currentUser?.last_name]
-        .filter(Boolean)
-        .join(" ")
-        .trim();
       const response = await fetch(
         `${baseUrl}/wp-json/mk100glass/v1/raffles/${raffleId}/tickets`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
             Authorization: authHeader,
           },
-          body: JSON.stringify({
-            ticket_number: `FREE-${Date.now()}`,
-            buyer_name: buyerName || currentUser?.username || currentUser?.email,
-            buyer_email: currentUser?.email,
-            product_id: productId,
-          }),
         }
       );
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
+        if (response.status === 409) {
+          setHasClaimed(true);
+          throw new Error(
+            data?.error ||
+              data?.message ||
+              "You have already claimed your free ticket for this raffle."
+          );
+        }
         throw new Error(data?.error || data?.message || "Unable to claim ticket.");
       }
       await onClaim?.();
+      setHasClaimed(true);
       setStatus("success");
       setMessage("Free ticket claimed! Check your dashboard for confirmation.");
     } catch (error) {
@@ -139,9 +194,9 @@ export default function ClaimFreeTicket({
           type="button"
           onClick={handleClaim}
           className="w-full bg-emerald-400 text-emerald-900 hover:bg-emerald-300 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={isSubmitting || !isLoggedIn}
+          disabled={isSubmitting || !isLoggedIn || hasClaimed}
         >
-          {isSubmitting ? "Claiming…" : "Claim Free Ticket"}
+          {isSubmitting ? "Claiming…" : hasClaimed ? "Ticket Already Claimed" : "Claim Free Ticket"}
         </Button>
       </div>
     </section>

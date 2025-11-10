@@ -144,7 +144,7 @@ export default function PurchaseAdditionalTickets({
         )}
         <Button
           type="submit"
-          className="w-full bg-amber-400 text-amber-950 hover:bg-amber-300"
+          className="w-full bg-amber-400 text-amber-950 hover:bg-amber-300 cursor-pointer"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Processing…" : `Purchase Ticket${activeBundle && activeBundle.quantity > 1 ? "s" : ""}`}
