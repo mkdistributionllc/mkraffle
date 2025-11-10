@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useState } from "react";
+import { authUtils } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -73,6 +74,12 @@ export default function LoginForm({
           user: data?.user,
           ...data,
         };
+        if (result?.token && result?.user) {
+          authUtils.setAuthData(result.token as string, result.user, remember);
+        }
+      }
+      if (result?.token && result?.user) {
+        authUtils.setAuthData(result.token as string, result.user, remember);
       }
       if (!result) {
         throw new Error(

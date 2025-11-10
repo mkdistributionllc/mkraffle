@@ -29,7 +29,7 @@ export default function HomePage() {
                 <RaffleEntriesWheel entries={raffleEntries} />
               </div>
               <div className="flex flex-col gap-8">
-                <ClaimFreeTicket />
+                <ClaimFreeTicket raffleId={1} />
                 <PurchaseAdditionalTickets />
               </div>
             </div>

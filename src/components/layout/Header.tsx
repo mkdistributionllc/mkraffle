@@ -6,6 +6,7 @@ import LoginForm from "@/components/auth/LoginForm";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
 import { authUtils } from "@/lib/api";
+import { User } from "lucide-react";
 
 const navItems = [
   { label: "Shop", href: "https://mk100glass.com/shop/" },
@@ -56,15 +57,14 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          {isLoggedIn ? 'yes' : 'no'}
-          {!isLoggedIn && (
+          {!isLoggedIn ? (
             <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
               <DialogTrigger asChild>
                 <Button
                   variant="outline"
                   className="border-white/20 bg-transparent text-white cursor-pointer"
                 >
-                  Login
+                  <User className="w-4 h-4 mr-1" />Login
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md border-white/10 bg-zinc-950">
@@ -89,6 +89,13 @@ export default function Header() {
                 </p>
               </DialogContent>
             </Dialog>
+          ) : (
+            <Button
+              variant="outline"
+              className="border-white/20 bg-transparent text-white cursor-pointer"
+            >
+              <User className="w-4 h-4 mr-1" />Account
+            </Button>
           )}
         </nav>
       </div>

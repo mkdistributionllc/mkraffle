@@ -1,32 +1,92 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { authUtils } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 type ClaimFreeTicketProps = {
-  onClaim?: (email: string) => Promise<void> | void;
+  raffleId: number;
+  productId?: number;
+  onClaim?: () => Promise<void> | void;
   className?: string;
 };
 
-export default function ClaimFreeTicket({ onClaim, className }: ClaimFreeTicketProps) {
-  const [email, setEmail] = useState("");
+export default function ClaimFreeTicket({
+  raffleId,
+  productId = 0,
+  onClaim,
+  className,
+}: ClaimFreeTicketProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [message, setMessage] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStatus("idle");
-    setMessage(null);
-    if (!email) {
+  useEffect(() => {
+    const updateAuthState = () => {
+      setIsLoggedIn(authUtils.isAuthenticated());
+      setCurrentUser(authUtils.getCurrentUser());
+    };
+    updateAuthState();
+    if (typeof window !== "undefined") {
+      window.addEventListener("authStateChanged", updateAuthState);
+      window.addEventListener("storage", updateAuthState);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("authStateChanged", updateAuthState);
+        window.removeEventListener("storage", updateAuthState);
+      }
+    };
+  }, []);
+
+  const authHeader = useMemo(() => {
+    if (!isLoggedIn || !currentUser) return null;
+    const token = authUtils.getToken();
+    const username = currentUser?.username || currentUser?.email;
+    if (!token || !username) return null;
+    return `Basic ${typeof window !== "undefined" ? window.btoa(`${username}:${token}`) : ""}`;
+  }, [isLoggedIn, currentUser]);
+
+  async function handleClaim() {
+    if (!authHeader) {
       setStatus("error");
-      setMessage("Enter the email tied to your MK100 account.");
+      setMessage("Please sign in to claim your ticket.");
       return;
     }
     try {
       setIsSubmitting(true);
-      await onClaim?.(email);
+      setStatus("idle");
+      setMessage(null);
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      if (!baseUrl) {
+        throw new Error("API base URL is not configured.");
+      }
+      const buyerName = [currentUser?.first_name, currentUser?.last_name]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
+      const response = await fetch(
+        `${baseUrl}/wp-json/mk100glass/v1/raffles/${raffleId}/tickets`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authHeader,
+          },
+          body: JSON.stringify({
+            ticket_number: `FREE-${Date.now()}`,
+            buyer_name: buyerName || currentUser?.username || currentUser?.email,
+            buyer_email: currentUser?.email,
+            product_id: productId,
+          }),
+        }
+      );
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data?.error || data?.message || "Unable to claim ticket.");
+      }
+      await onClaim?.();
       setStatus("success");
       setMessage("Free ticket claimed! Check your dashboard for confirmation.");
     } catch (error) {
@@ -55,26 +115,11 @@ export default function ClaimFreeTicket({ onClaim, className }: ClaimFreeTicketP
             Claim Your FREE Raffle Ticket
           </h3>
           <p className="mt-3 text-sm text-emerald-100/80">
-            Every registered account receives one complimentary ticket. Login to your account to secure your spot in the raffle.
+            Every registered account receives one complimentary ticket. Sign in to secure your spot in the raffle.
           </p>
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        {/* <div className="grid gap-2">
-          <Label htmlFor="claim-email" className="text-emerald-50">
-            Account email
-          </Label>
-          <Input
-            id="claim-email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            autoComplete="email"
-            className="border-emerald-400/40 bg-emerald-400/10 text-white placeholder:text-emerald-100/60 focus-visible:border-emerald-300 focus-visible:ring-emerald-200/40"
-            required
-          />
-        </div> */}
+      <div className="mt-6 space-y-4">
         {status !== "idle" && message && (
           <p
             className={
@@ -85,15 +130,20 @@ export default function ClaimFreeTicket({ onClaim, className }: ClaimFreeTicketP
             {message}
           </p>
         )}
+        {!isLoggedIn && (
+          <p className="text-sm text-emerald-200/80">
+            You need to be logged in to claim your free ticket.
+          </p>
+        )}
         <Button
-          type="submit"
-          className="w-full bg-emerald-400 text-emerald-900 hover:bg-emerald-300"
-          disabled={isSubmitting}
+          type="button"
+          onClick={handleClaim}
+          className="w-full bg-emerald-400 text-emerald-900 hover:bg-emerald-300 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={isSubmitting || !isLoggedIn}
         >
           {isSubmitting ? "Claiming…" : "Claim Free Ticket"}
         </Button>
-      </form>
+      </div>
     </section>
   );
 }
-

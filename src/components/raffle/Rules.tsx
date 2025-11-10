@@ -29,18 +29,15 @@ export default function RaffleRules() {
   return (
     <section className="py-16">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-12 px-6 text-zinc-200">
-        <header className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
-            MK100 Black Friday Raffle
-          </p>
+        <div className="text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-1 text-xs uppercase tracking-[0.3em] text-red-500 font-bold">MK100 Black Friday Raffle</span>
           <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">
             How the Raffle Works
           </h2>
           <p className="mt-4 text-sm text-zinc-400 sm:text-base">
             Review the rules, understand how entries are counted, and learn what happens when you win.
           </p>
-        </header>
-
+        </div>
         <div className="grid gap-10">
           {sections.map((section) => (
             <article
@@ -59,8 +56,7 @@ export default function RaffleRules() {
             </article>
           ))}
         </div>
-
-        <footer className="rounded-xl border border-amber-400/20 bg-amber-400/10 p-6 text-sm text-amber-100">
+        {/* <div className="rounded-xl border border-amber-400/20 bg-amber-400/10 p-6 text-sm text-amber-100">
           Have questions? Reach out to{" "}
           <a
             href="mailto:support@mk100glass.com"
@@ -69,7 +65,7 @@ export default function RaffleRules() {
             support@mk100glass.com
           </a>{" "}
           before the drawing closes.
-        </footer>
+        </div> */}
       </div>
     </section>
   );
