@@ -1,5 +1,4 @@
 "use client";
-
 import axios from "axios";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -60,7 +59,7 @@ export default function LoginForm({
       if (onSubmit) {
         result = await onSubmit({ login, password, remember });
       } else {
-        const response = await axios.post("/mk100glass/v1/login", {
+        const response = await axios.post(process.env.NEXT_PUBLIC_API_BASE_URL + "/wp-json/mk100glass/v1/login", {
           login,
           password,
           remember,

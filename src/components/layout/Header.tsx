@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import LoginForm from "@/components/auth/LoginForm";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
+import { authUtils } from "@/lib/api";
 
 const navItems = [
   { label: "Shop", href: "https://mk100glass.com/shop/" },
@@ -13,6 +14,22 @@ const navItems = [
 
 export default function Header() {
   const [loginOpen, setLoginOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkStatus = () => setIsLoggedIn(authUtils.isAuthenticated());
+    checkStatus();
+    if (typeof window !== "undefined") {
+      window.addEventListener("authStateChanged", checkStatus);
+      window.addEventListener("storage", checkStatus);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("authStateChanged", checkStatus);
+        window.removeEventListener("storage", checkStatus);
+      }
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/95 backdrop-blur">
@@ -39,31 +56,40 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
-            <DialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="border-white/20 bg-transparent text-white cursor-pointer"
-              >
-                Login
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md border-white/10 bg-zinc-950">
-              <DialogHeader>
-                <DialogTitle className="text-white">Log in to your account</DialogTitle>
-                <DialogDescription>
-                  Access raffle entries and manage your profile.
-                </DialogDescription>
-              </DialogHeader>
-              <LoginForm
-                onSuccess={() => {
-                  setLoginOpen(false);
-                }}
-                className="mt-4"
-              />
-              <p>Do not have an account yet? <Link href="/join" className="text-sm underline">Create account</Link></p>
-            </DialogContent>
-          </Dialog>
+          {isLoggedIn ? 'yes' : 'no'}
+          {!isLoggedIn && (
+            <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="border-white/20 bg-transparent text-white cursor-pointer"
+                >
+                  Login
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md border-white/10 bg-zinc-950">
+                <DialogHeader>
+                  <DialogTitle className="text-white">Log in to your account</DialogTitle>
+                  <DialogDescription>
+                    Access raffle entries and manage your profile.
+                  </DialogDescription>
+                </DialogHeader>
+                <LoginForm
+                  onSuccess={() => {
+                    setLoginOpen(false);
+                    setIsLoggedIn(true);
+                  }}
+                  className="mt-4"
+                />
+                <p>
+                  Do not have an account yet?{" "}
+                  <Link href="/join" className="text-sm underline">
+                    Create account
+                  </Link>
+                </p>
+              </DialogContent>
+            </Dialog>
+          )}
         </nav>
       </div>
     </header>

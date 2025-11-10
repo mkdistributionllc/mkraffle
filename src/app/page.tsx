@@ -4,6 +4,7 @@ import ClaimFreeTicket from "@/components/raffle/ClaimFreeTicket";
 import { RaffleEntriesWheel } from "@/components/raffle/EntriesWheel";
 import PurchaseAdditionalTickets from "@/components/raffle/PurchaseAdditionalTickets";
 import RaffleCountdown from "@/components/raffle/RaffleCountdown";
+import RaffleProducts from "@/components/raffle/Products";
 import RaffleRules from "@/components/raffle/Rules";
 import raffleEntries from "@/data/mockRaffleEntries.json";
 
@@ -17,6 +18,7 @@ export default function HomePage() {
             <div className="flex flex-col items-center gap-6 text-center">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-1 text-xs uppercase tracking-[0.3em] text-red-500 font-bold">MK100 Black Friday Raffle</span>
               <RaffleCountdown start_date="2025-11-29T00:00:00Z" />
+              <RaffleProducts />
               <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
                 Spin to win over <span className="text-green-500">$100</span> worth of MK100 glass!
               </h1>
