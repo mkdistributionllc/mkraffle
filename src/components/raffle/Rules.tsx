@@ -28,7 +28,7 @@ const sections = [
 export default function RaffleRules() {
   return (
     <section className="py-16">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-12 px-6 text-zinc-200">
+      <div className="container mx-auto flex w-full max-w-4xl flex-col gap-12 px-6 text-zinc-200">
         <div className="text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-1 text-xs uppercase tracking-[0.3em] text-red-500 font-bold">MK100 Black Friday Raffle</span>
           <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">
